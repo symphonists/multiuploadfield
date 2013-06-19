@@ -58,7 +58,7 @@
 		}
 
 		public function processRawFieldData($data, &$status, &$message=null, $simulate = false, $entry_id = null) {
-			retur parent::processRawFieldData($data, &$status, &$message, $simulate, $entry_id);
+			return parent::processRawFieldData($data, &$status, &$message, $simulate, $entry_id);
 		}
 
 	/*-------------------------------------------------------------------------
@@ -66,7 +66,61 @@
 	-------------------------------------------------------------------------*/
 
 		public function displayPublishPanel(XMLElement &$wrapper, $data = null, $flagWithError = null, $fieldnamePrefix = null, $fieldnamePostfix = null, $entry_id = null) {
-			return parent::displayPublishPanel($wrapper, $data, $flagWithError, $fieldnamePrefix, $fieldnamePostfix, $entry_id);
+
+			// Check, does the destination exist...
+			if (is_dir(DOCROOT . $this->get('destination') . '/') === false) {
+				$flagWithError = __('The destination directory, %s, does not exist.', array(
+					'<code>' . $this->get('destination') . '</code>'
+				));
+			}
+
+			// And is it writable?
+			else if ($flagWithError && is_writable(DOCROOT . $this->get('destination') . '/') === false) {
+				$flagWithError = __('Destination folder is not writable.')
+					. ' '
+					. __('Please check permissions on %s.', array(
+						'<code>' . $this->get('destination') . '</code>'
+					));
+			}
+
+			$label = Widget::Label($this->get('label'));
+			$label->setAttribute('class', 'file');
+			if($this->get('required') != 'yes') $label->appendChild(new XMLElement('i', __('Optional')));
+
+			$span = new XMLElement('span', NULL, array('class' => 'frame'));
+			$files = new XMLElement('ul');
+
+			if (is_array($data) && !empty($data)) {
+				foreach($data as $file_item) {
+					$filename = $this->get('destination') . '/' . basename($data['file']);
+					$file = $this->getFilePath($data['file']);
+
+					if (file_exists($file) === false || !is_readable($file)) {
+						$flagWithError = __('The file uploaded is no longer available. Please check that it exists, and is readable.');
+					}
+
+					$li = new XMLElement('li', Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", $filename), URL . $filename));
+					$li->appendChild(
+						Widget::Input('fields'.$fieldnamePrefix.'['.$this->get('element_name').']'.$fieldnamePostfix . '[]', $filename, 'hidden')
+					);
+
+					$files->appendChild($li);
+				}
+			}
+			else {
+				$li = new XMLElement('li');
+				$li->appendChild(
+					Widget::Input('fields'.$fieldnamePrefix.'['.$this->get('element_name').']'.$fieldnamePostfix . '[]', null, 'file')
+				);
+
+				$files->appendChild($li);
+			}
+
+			$span->appendChild($files);
+			$label->appendChild($span);
+
+			if($flagWithError != NULL) $wrapper->appendChild(Widget::Error($label, $flagWithError));
+			else $wrapper->appendChild($label);
 		}
 
 		public function appendFormattedElement(XMLElement &$wrapper, $data, $encode = false, $mode = null, $entry_id = null) {
