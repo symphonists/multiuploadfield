@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension id="multiuploadfield" status="experimental" xmlns="http://getsymphony.com/schemas/extension/1.0">
+	<name>Multi Upload Field</name>
+	<description>Allows multiple files to be uploaded to the same field.</description>
+	<repo type="github">https://github.com/symphonists/multiuploadfield</repo>
+	<types>
+		<type>Field Types</type>
+	</types>
+	<authors>
+		<author>
+			<name github="brendo" symphony="brendo">Brendan Abbott</name>
+			<website>http://www.bloodbone.ws</website>
+		</author>
+	</authors>
+	<releases>
+		<release version='0.1' release-date='unreleased' min='2.3.2'>
+			- Initial release
+		</release>
+	</releases>
+</extension>
