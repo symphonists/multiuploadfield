@@ -1,0 +1,11 @@
+/**
+ * Multiple File Upload
+ */
+
+.field-multiupload .frame {
+	margin-top: 1px;
+}
+
+.field-multiupload .frame li {
+	padding: 10px;
+}

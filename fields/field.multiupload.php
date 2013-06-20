@@ -82,13 +82,17 @@
 						'<code>' . $this->get('destination') . '</code>'
 					));
 			}
+			
+			// Styles
+			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/multiuploadfield/assets/multiupload.publish.css', 'screen', 104, false);
 
+			// Markup
 			$label = Widget::Label($this->get('label'));
 			$label->setAttribute('class', 'file');
 			if($this->get('required') != 'yes') $label->appendChild(new XMLElement('i', __('Optional')));
 
-			$span = new XMLElement('span', NULL, array('class' => 'frame'));
-			$files = new XMLElement('ul');
+			$frame = new XMLElement('div', NULL, array('class' => 'frame'));
+			$files = new XMLElement('ol');
 
 			if (is_array($data) && !empty($data)) {
 				foreach($data as $file_item) {
@@ -116,8 +120,8 @@
 				$files->appendChild($li);
 			}
 
-			$span->appendChild($files);
-			$label->appendChild($span);
+			$frame->appendChild($files);
+			$label->appendChild($frame);
 
 			if($flagWithError != NULL) $wrapper->appendChild(Widget::Error($label, $flagWithError));
 			else $wrapper->appendChild($label);
