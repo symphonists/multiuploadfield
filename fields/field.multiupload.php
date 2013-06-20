@@ -54,11 +54,55 @@
 		 * Note to self. Make core Upload field easier to extend
 		 */
 		public function checkPostFieldData($data, &$message, $entry_id = null) {
-			return parent::checkPostFieldData($data, $message, $entry_id);
+			$status = Field::__OK__;
+
+			if(is_array($data)) {
+				foreach($data as $file_data) {
+					$status = parent::checkPostFieldData($file_data, $message, $entry_id);
+
+					// Something went wrong, abort now ($message will have the error)
+					if($status !== Field::__OK__) {
+						break;
+					}
+				}
+			}
+
+			return $status;
 		}
 
 		public function processRawFieldData($data, &$status, &$message=null, $simulate = false, $entry_id = null) {
-			return parent::processRawFieldData($data, &$status, &$message, $simulate, $entry_id);
+			$status = Field::__OK__;
+			$full_result = array();
+
+			if(is_array($data)) {
+				foreach($data as $file_data) {
+					$result = parent::processRawFieldData($file_data, &$status, &$message, $simulate, $entry_id);
+
+					// Something when wrong, abort processing the rest, ($message) will have the rest
+					if($status !== Field::__OK__) {
+						break;
+					}
+					// Merge the result of that file upload with the rest, ready for it to be set
+					// on the Entry object
+					else {
+						$full_result[] = $result;
+					}
+				}
+			}
+
+			// Now we need to iterate over the array of results and create an array of keys for each.
+			$final_result = array();
+			foreach($full_result as $result) {
+				foreach($result as $column => $value) {
+					if(array_key_exists($column, $final_result) === false) {
+						$final_result[$column] = array();
+					}
+
+					$final_result[$column][] = $value;
+				}
+			}
+
+			return $final_result;
 		}
 
 	/*-------------------------------------------------------------------------
@@ -66,6 +110,11 @@
 	-------------------------------------------------------------------------*/
 
 		public function displayPublishPanel(XMLElement &$wrapper, $data = null, $flagWithError = null, $fieldnamePrefix = null, $fieldnamePostfix = null, $entry_id = null) {
+
+			// Styles
+			if(Symphony::Engine() instanceof Administration) {
+				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/multiuploadfield/assets/multiupload.publish.css', 'screen', 104, false);
+			}
 
 			// Check, does the destination exist...
 			if (is_dir(DOCROOT . $this->get('destination') . '/') === false) {
@@ -82,9 +131,6 @@
 						'<code>' . $this->get('destination') . '</code>'
 					));
 			}
-			
-			// Styles
-			Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/multiuploadfield/assets/multiupload.publish.css', 'screen', 104, false);
 
 			// Markup
 			$label = Widget::Label($this->get('label'));
