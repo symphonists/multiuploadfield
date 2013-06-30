@@ -9,3 +9,11 @@
 .field-multiupload .frame li {
 	padding: 10px;
 }
+
+.field-multiupload li .frame {
+	margin-bottom: 0;
+}
+
+.field-multiupload li .frame a:first-child {
+	margin-top: 0;
+}
