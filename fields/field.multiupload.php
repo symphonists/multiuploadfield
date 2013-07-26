@@ -316,6 +316,7 @@
 			// Styles
 			if(Symphony::Engine() instanceof Administration) {
 				Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/multiuploadfield/assets/multiupload.publish.css', 'screen', 104, false);
+				Administration::instance()->Page->addScriptToHead(URL . '/extensions/multiuploadfield/assets/multiupload.publish.js', 100, false);
 			}
 
 			// Check, does the destination exist...
@@ -336,11 +337,16 @@
 
 			// Markup
 			$label = Widget::Label($this->get('label'));
-			$label->setAttribute('class', 'file');
 			if($this->get('required') != 'yes') $label->appendChild(new XMLElement('i', __('Optional')));
+			$wrapper->appendChild($label);
 
-			$frame = new XMLElement('div', NULL, array('class' => 'frame'));
-			$files = new XMLElement('ol');
+			$duplicator = new XMLElement('div', null, array(
+				'class' => 'frame multiupload-duplicator')
+			);
+			$files = new XMLElement('ol', null, array(
+				'data-add' => __('Add file'),
+				'data-remove' => __('Remove file')
+			));
 			
 			// Always ensure we are working with multiple files (even if there is one)
 			if(isset($data) && is_array($data)) {
@@ -365,30 +371,32 @@
 					
 					$li = new XMLElement('li');
 
-					$span = new XMLElement('span', NULL, array('class' => 'frame'));
-					$span->appendChild(new XMLElement('span', Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", $filename), URL . $filename)));
-					$span->appendChild(
+					$li->appendChild(
+						new XMLElement('header', 
+							new XMLElement('span', 
+								Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", basename($file_item['file'])), URL . $filename)
+							)
+						)
+					);
+					$li->appendChild(
 						Widget::Input('fields'.$fieldnamePrefix.'['.$this->get('element_name').']'.$fieldnamePostfix . '[]', $filename, 'hidden')
 					);
 
-					$li->appendChild($span);
 					$files->appendChild($li);
 				}
 			}
 			
 			// Add upload file
-			$li = new XMLElement('li');
+			$li = new XMLElement('li', '<header><span>' . __('Waiting for file') . ' …</span></header>', array('class' => 'template local'));
 			$li->appendChild(
 				Widget::Input('fields'.$fieldnamePrefix.'['.$this->get('element_name').']'.$fieldnamePostfix . '[-1]', null, 'file')
 			);
 
 			$files->appendChild($li);
+			$duplicator->appendChild($files);
 
-			$frame->appendChild($files);
-			$label->appendChild($frame);
-
-			if($flagWithError != NULL) $wrapper->appendChild(Widget::Error($label, $flagWithError));
-			else $wrapper->appendChild($label);
+			if($flagWithError != NULL) $wrapper->appendChild(Widget::Error($duplicator, $flagWithError));
+			else $wrapper->appendChild($duplicator);
 		}
 
 		public function appendFormattedElement(XMLElement &$wrapper, $data, $encode = false, $mode = null, $entry_id = null) {

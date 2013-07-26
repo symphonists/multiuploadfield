@@ -3,17 +3,67 @@
  */
 
 .field-multiupload .frame {
-	margin-top: 1px;
+	margin-top: -12px;
 }
 
-.field-multiupload .frame li {
-	padding: 10px;
+.field-multiupload .frame .local {
+	background: #fbfbfb;
+	color: #dad6cf;
 }
 
-.field-multiupload li .frame {
-	margin-bottom: 0;
+.field-multiupload .frame header {
+	padding: 10px 0;
+	border-bottom: none !important;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
 }
 
-.field-multiupload li .frame a:first-child {
-	margin-top: 0;
+.field-multiupload .frame .content {
+	display: none;
+}
+
+.field-multiupload .frame a:not(.destructor) {
+	margin: 0 !important;
+	display: inline !important;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.field-multiupload .frame .file {
+	color: #bac4dd;
+}
+
+.field-multiupload .frame .destructor {
+	top: 10px;
+	right: 0;
+	padding-right: 10px;
+	background: #f5f5f5;
+}
+
+.field-multiupload .frame .destructor::before {
+	content: '';
+	display: block;
+	width: 25px;
+	height: 25px;
+	position: absolute;
+	top: 0;
+	left: -25px;
+	background-image: -webkit-linear-gradient(left, rgba(245, 245, 245, 0) 0%, rgba(245, 245, 245, 1) 80%);
+	background-image:    -moz-linear-gradient(left, rgba(245, 245, 245, 0) 0%, rgba(245, 245, 245, 1) 80%);
+	background-image:     -ms-linear-gradient(left, rgba(245, 245, 245, 0) 0%, rgba(245, 245, 245, 1) 80%);
+	background-image:      -o-linear-gradient(left, rgba(245, 245, 245, 0) 0%, rgba(245, 245, 245, 1) 80%);
+	background-image:         linear-gradient(left, rgba(245, 245, 245, 0) 0%, rgba(245, 245, 245, 1) 80%);
+}
+
+.field-multiupload .frame .local .destructor {
+	background: #fbfbfb;
+}
+
+.field-multiupload .frame .local .destructor::before {
+
+	background-image: -webkit-linear-gradient(left, rgba(251, 251, 251, 0) 0%, rgba(251, 251, 251, 1) 80%);
+	background-image:    -moz-linear-gradient(left, rgba(251, 251, 251, 0) 0%, rgba(251, 251, 251, 1) 80%);
+	background-image:     -ms-linear-gradient(left, rgba(251, 251, 251, 0) 0%, rgba(251, 251, 251, 1) 80%);
+	background-image:      -o-linear-gradient(left, rgba(251, 251, 251, 0) 0%, rgba(251, 251, 251, 1) 80%);
+	background-image:         linear-gradient(left, rgba(251, 251, 251, 0) 0%, rgba(251, 251, 251, 1) 80%);
 }
