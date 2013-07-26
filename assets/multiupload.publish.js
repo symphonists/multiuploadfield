@@ -11,10 +11,25 @@
 
   		// Select file
   		multiupload.on('constructshow.duplicator', 'li', function(event) {
-  			$(this).find('input[type="file"]').click();
+   			var file = $(this).find('input[type="file"]').focus().trigger('click.multiupload');
+
+ 			setTimeout(function() {
+				$('body').one('mousemove.multiupload', function() {
+					console.log('focus');
+					$(file).trigger('change.multiupload');
+				});
+  			}, 500);
   		});
   		multiupload.on('change.multiupload', 'input[type="file"]', function(event) {
-  			$(this).parents('.instance').find('span').text(this.value.replace(/^.*[\\\/]/, '')).addClass('file');
+  			var name = this.value,
+  				instance = $(this).parents('.instance');
+
+  			if(name != '') {
+  				instance.find('span').text(name.replace(/^.*[\\\/]/, '')).addClass('file');
+  			}
+  			else {
+  				instance.find('.destructor').trigger('click.duplicator');
+  			}
   		});
 	});
 
