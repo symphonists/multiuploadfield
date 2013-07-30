@@ -474,6 +474,8 @@
 			$message = $status = null;
 			$modes = (object)$this->getImportModes();
 
+			if(!is_array($data)) $data = array($data);
+
 			if($mode === $modes->getValue) {
 				return $data;
 			}
