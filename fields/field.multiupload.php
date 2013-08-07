@@ -26,7 +26,6 @@
 				  `mimetype` varchar(100) default NULL,
 				  `meta` TEXT default NULL,
 				  PRIMARY KEY  (`id`),
-				  KEY `entry_id` (`entry_id`),
 				  KEY `file` (`file`),
 				  KEY `mimetype` (`mimetype`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -467,8 +466,8 @@
 
 		public function getImportModes() {
 			return array(
-				'getValue' =>		ImportableField::STRING_VALUE,
-				'getPostdata' =>	ImportableField::ARRAY_VALUE
+				'getPostdata' =>	ImportableField::ARRAY_VALUE,
+				'getValue' =>		ImportableField::STRING_VALUE
 			);
 		}
 
@@ -482,7 +481,11 @@
 				return $data;
 			}
 			else if($mode === $modes->getPostdata) {
-				return $this->processRawFieldData($data, $status, $message, true, $entry_id);
+				$result = array();
+				foreach($data as $file) {
+					$result[]['file'] = $file;
+				}
+				return $result;
 			}
 
 			return null;
