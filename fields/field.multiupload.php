@@ -358,10 +358,12 @@
 					$data = $this->buildFileItems($data);
 				}
 			}
-			
+
 			// Do we have an array of files, or do we have an empty array?
 			if (is_array($data) && !empty($data) && $first !== false) {
 				foreach($data as $file_item) {
+					if(empty($file_item['file'])) continue;
+
 					$filename = $this->get('destination') . '/' . basename($file_item['file']);
 					$file = $this->getFilePath($file_item['file']);
 
