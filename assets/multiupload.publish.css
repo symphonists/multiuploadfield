@@ -67,3 +67,22 @@
 	background-image:      -o-linear-gradient(left, rgba(251, 251, 251, 0) 0%, rgba(251, 251, 251, 1) 80%);
 	background-image:         linear-gradient(left, rgba(251, 251, 251, 0) 0%, rgba(251, 251, 251, 1) 80%);
 }
+
+/* Errors */
+
+.field-multiupload .invalid .frame {
+	margin-top: 0;
+}
+
+.field-multiupload .invalid .frame ol {
+	box-shadow: none;
+}
+
+.field-multiupload .invalid .frame li,
+.field-multiupload .invalid .frame button {
+	border-color: #cc3311;
+}
+
+.field-multiupload .invalid .frame a:not(.destructor) {
+	color: #3f69a5;
+}
