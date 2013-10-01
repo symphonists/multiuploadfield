@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2013 by original authors @ fontello.com</metadata>
+<defs>
+<font id="icons" horiz-adv-x="1000" >
+<font-face font-family="icons" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="upload-cloud" unicode="&#xe800;" d="m760 494q100 0 170-68t70-166t-70-166t-170-68l-190 0l0 190l106 0l-176 230l-174-230l104 0l0-190l-248 0q-74 0-128 52t-54 124q0 74 53 126t129 52q14 0 20-2q-2 12-2 38q0 108 78 184t188 76q90 0 160-52t94-134q28 4 40 4z" horiz-adv-x="1000" />
+</font>
+</defs>
+</svg>

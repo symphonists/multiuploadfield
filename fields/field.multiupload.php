@@ -335,13 +335,14 @@
 			}
 
 			// Markup
+			$wrapper->setAttribute('data-fieldname', 'fields' . $fieldnamePrefix . '[' . $this->get('element_name'). ']' .$fieldnamePostfix . '[]');
 			$label = Widget::Label($this->get('label'));
 			if($this->get('required') != 'yes') $label->appendChild(new XMLElement('i', __('Optional')));
 			$wrapper->appendChild($label);
 
 			$duplicator = new XMLElement('div', null, array(
-				'class' => 'frame multiupload-duplicator')
-			);
+				'class' => 'frame multiupload-files'
+			));
 			$files = new XMLElement('ol', null, array(
 				'data-add' => __('Add file'),
 				'data-remove' => __('Remove file')
@@ -374,9 +375,7 @@
 
 					$li->appendChild(
 						new XMLElement('header', 
-							new XMLElement('span', 
-								Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", basename($file_item['file'])), URL . $filename)
-							)
+							Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", basename($file_item['file'])), URL . $filename)
 						)
 					);
 					$li->appendChild(
@@ -388,7 +387,7 @@
 			}
 			
 			// Add upload file
-			$li = new XMLElement('li', '<header><span>' . __('Waiting for file') . ' …</span></header>', array('class' => 'template local'));
+			$li = new XMLElement('li', null, array('class' => 'template queued multiupload-fallback'));
 			$li->appendChild(
 				Widget::Input('fields'.$fieldnamePrefix.'['.$this->get('element_name').']'.$fieldnamePostfix . '[-1]', null, 'file')
 			);
