@@ -91,7 +91,7 @@
 
 			// Send data
 			$.ajax({
-				url: Symphony.Context.get('root') + '/extensions/multiuploadfield/lib/upload.php?field-id=' + fieldId + '&amp;entry-id=' + entryId,
+				url: Symphony.Context.get('root') + '/extensions/multiuploadfield/lib/upload.php?field-id=' + fieldId + '&entry-id=' + entryId,
 				data: data,
 				cache: false,
 				contentType: false,
@@ -109,15 +109,15 @@
 					item.removeClass('queued');
 					item.find('.multiupload-progress').css('width', '100%');
 					item.find('.destructor').text(Symphony.Language.get('Remove file'));
-					item.find('header a:first').attr('href', result);
+					item.find('header a:first').attr('href', result.url);
 					$('<input />', {
 						type: 'hidden',
-						val: result,
+						val: result.url,
 						name: field.attr('data-fieldname')
 					}).appendTo(item);
-				},			
+				},
 
-				// Upload progress	
+				// Upload progress
 				xhrFields: {
 					onprogress: function(progress) {
 						item.find('.multiupload-progress').css('width', Math.floor(100 * progress.loaded / progress.total) + '%');
@@ -125,7 +125,7 @@
 				}
 			});
 		};
-		
+
 	/*-------------------------------------------------------------------------
 		API
 	-------------------------------------------------------------------------*/

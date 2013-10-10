@@ -364,8 +364,8 @@
 				foreach($data as $file_item) {
 					if(empty($file_item['file'])) continue;
 
-					$filename = $this->get('destination') . '/' . basename($file_item['file']);
-					$file = $this->getFilePath($file_item['file']);
+					$filename = basename($file_item['file']);
+					$file = $this->getFilePath($filename);
 
 					if (file_exists($file) === false || !is_readable($file)) {
 						$flagWithError = __('The file, %s, is no longer available. Please check that it exists, and is readable.', array('<code>' . basename($file) . '</code>'));
@@ -375,7 +375,7 @@
 
 					$li->appendChild(
 						new XMLElement('header', 
-							Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", basename($file_item['file'])), URL . $filename)
+							Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", $filename), $file_item['file'])
 						)
 					);
 					$li->appendChild(
@@ -385,7 +385,7 @@
 					$files->appendChild($li);
 				}
 			}
-			
+
 			// Add upload file
 			$li = new XMLElement('li', null, array('class' => 'template queued multiupload-fallback'));
 			$li->appendChild(

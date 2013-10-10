@@ -34,8 +34,29 @@
 	}
 	else {
 		$message = '';
+		$data = $_FILES['file'];
 		// Do upload
-		// $field->processRawFieldDataIndividual($data, &$status, $message, false, $entry_id, $position)
-		
+		$result = $field->processRawFieldDataIndividual($data, $status, $message, false, $entry_id, $position);
+
 		// output back to browser..
+		if(is_array($result)) {
+			header("HTTP/1.0 201 Created", true, 201);
+			header("Content-Type: application/json");
+
+			echo json_encode(array(
+				'url' => str_replace(WORKSPACE, URL . '/workspace', $field->getFilePath($result['file'])),
+				'size' => $result['size'],
+				'mimetype' => $result['mimetype'],
+				'meta' => unserialize($result['meta'])
+			));
+		}
+		else {
+			header("HTTP/1.0 400 Bad Request", true, 400);
+			header("Content-Type: application/json");
+
+			echo json_encode(array(
+				'error' => $message
+			));
+		}
+		exit;
 	}
