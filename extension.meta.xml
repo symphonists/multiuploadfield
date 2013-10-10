@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension id="multiuploadfield" status="experimental" xmlns="http://getsymphony.com/schemas/extension/1.0">
+<extension id="multiuploadfield" status="released" xmlns="http://getsymphony.com/schemas/extension/1.0">
 	<name>Multi Upload Field</name>
 	<description>Allows multiple files to be uploaded to the same field.</description>
 	<repo type="github">https://github.com/symphonists/multiuploadfield</repo>
@@ -11,9 +11,13 @@
 			<name github="brendo" symphony="brendo">Brendan Abbott</name>
 			<website>http://www.bloodbone.ws</website>
 		</author>
+		<author>
+			<name github="hananils" symphony="hananils">Büro für Web- und Textgestaltung</name>
+			<website>http://hananils.de</website>
+		</author>
 	</authors>
 	<releases>
-		<release version='0.1' release-date='unreleased' min='2.3.2'>
+		<release version='1.0' release-date='2013-10-10' min='2.3.3'>
 			- Initial release
 		</release>
 	</releases>
