@@ -335,13 +335,14 @@
 			}
 
 			// Markup
+			$wrapper->setAttribute('data-fieldname', 'fields' . $fieldnamePrefix . '[' . $this->get('element_name'). ']' .$fieldnamePostfix . '[]');
 			$label = Widget::Label($this->get('label'));
 			if($this->get('required') != 'yes') $label->appendChild(new XMLElement('i', __('Optional')));
 			$wrapper->appendChild($label);
 
 			$duplicator = new XMLElement('div', null, array(
-				'class' => 'frame multiupload-duplicator')
-			);
+				'class' => 'frame multiupload-files'
+			));
 			$files = new XMLElement('ol', null, array(
 				'data-add' => __('Add file'),
 				'data-remove' => __('Remove file')
@@ -363,8 +364,8 @@
 				foreach($data as $file_item) {
 					if(empty($file_item['file'])) continue;
 
-					$filename = $this->get('destination') . '/' . basename($file_item['file']);
-					$file = $this->getFilePath($file_item['file']);
+					$filename = basename($file_item['file']);
+					$file = $this->getFilePath($filename);
 
 					if (file_exists($file) === false || !is_readable($file)) {
 						$flagWithError = __('The file, %s, is no longer available. Please check that it exists, and is readable.', array('<code>' . basename($file) . '</code>'));
@@ -374,9 +375,7 @@
 
 					$li->appendChild(
 						new XMLElement('header', 
-							new XMLElement('span', 
-								Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", basename($file_item['file'])), URL . $filename)
-							)
+							Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", $filename), $file_item['file'])
 						)
 					);
 					$li->appendChild(
@@ -386,9 +385,9 @@
 					$files->appendChild($li);
 				}
 			}
-			
+
 			// Add upload file
-			$li = new XMLElement('li', '<header><span>' . __('Waiting for file') . ' …</span></header>', array('class' => 'template local'));
+			$li = new XMLElement('li', null, array('class' => 'template queued multiupload-fallback'));
 			$li->appendChild(
 				Widget::Input('fields'.$fieldnamePrefix.'['.$this->get('element_name').']'.$fieldnamePostfix . '[-1]', null, 'file')
 			);
