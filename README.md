@@ -1,4 +1,8 @@
-# Field: Multi File Upload
+# Multi File Upload
+
+![Multi File Upload UI](https://f.cloud.github.com/assets/25466/1245508/9aed979a-2a9f-11e3-97ef-64b80eb024be.png)
+
+This field enabled drag and drop upload of multiple file in the Symphony backend.
 
 ## Installation
 
