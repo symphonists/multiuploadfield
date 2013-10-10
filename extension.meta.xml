@@ -17,7 +17,7 @@
 		</author>
 	</authors>
 	<releases>
-		<release version='1.0' release-date='2013-10-10' min='2.3.3'>
+		<release version='1.0' date='2013-10-10' min='2.3.3'>
 			- Initial release
 		</release>
 	</releases>
