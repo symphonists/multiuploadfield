@@ -15,7 +15,7 @@
 	-------------------------------------------------------------------------*/
 
 		function init() {
-			var fields = $('.field-multiupload'),
+			var fields = $('div.field-multiupload'),
 				files = fields.find('.multiupload-files');
 
 			files.symphonyDuplicator({
