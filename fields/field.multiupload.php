@@ -366,18 +366,17 @@
 
 					$filename = basename($file_item['file']);
 					$file = $this->getFilePath($filename);
-
-					if (file_exists($file) === false || !is_readable($file)) {
-						$flagWithError = __('The file, %s, is no longer available. Please check that it exists, and is readable.', array('<code>' . basename($file) . '</code>'));
-					}
-					
 					$li = new XMLElement('li');
 
-					$li->appendChild(
-						new XMLElement('header', 
-							Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", $filename), $file_item['file'])
-						)
-					);
+					if(file_exists($file) === false || !is_readable($file)) {
+						$li->setAttribute('class', 'error');
+						$header = new XMLElement('header', __('The file, %s, is no longer available. Please check that it exists, and is readable.', array('<code>' . basename($file) . '</code>')));
+					}
+					else {
+						$header = new XMLElement('header', Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", $filename), $file_item['file']));
+					}
+					
+					$li->appendChild($header);
 					$li->appendChild(
 						Widget::Input('fields'.$fieldnamePrefix.'['.$this->get('element_name').']'.$fieldnamePostfix . '[]', $filename, 'hidden')
 					);
@@ -394,9 +393,7 @@
 
 			$files->appendChild($li);
 			$duplicator->appendChild($files);
-
-			if($flagWithError != NULL) $wrapper->appendChild(Widget::Error($duplicator, $flagWithError));
-			else $wrapper->appendChild($duplicator);
+			$wrapper->appendChild($duplicator);
 		}
 
 		public function appendFormattedElement(XMLElement &$wrapper, $data, $encode = false, $mode = null, $entry_id = null) {

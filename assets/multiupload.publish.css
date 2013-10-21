@@ -19,6 +19,8 @@
 
 .multiupload-files .instance {
 	-webkit-transition: all 0.15s ease-in 0.4s;
+	-moz-transition: all 0.15s ease-in 0.4s;
+	transition: all 0.15s ease-in 0.4s;
 	white-space: nowrap;
 	overflow: hidden;
 }
@@ -51,16 +53,17 @@
 }
 
 .multiupload-files .error {
-	background: #eb6347;
 	border-color: #cc3311 !important;
 }
 
-.multiupload-files .error a {
-	color: #fff;
+.multiupload-files .error header {
+	color: rgba(255, 255, 255, 0.7);
+	background: #eb6347;
 }
 
-.multiupload-files .error .destructor {
-	color: rgba(255, 255, 255, 0.7);
+.multiupload-files .error a,
+.multiupload-files .error code {
+	color: #fff;
 }
 
 /* Duplicator */
@@ -92,6 +95,8 @@
 	background: #4d78b4;
 	opacity: 0;
 	-webkit-transition: width 0.25s ease-in, opacity 0.25s ease-in 0.4s;
+	-moz-transition: width 0.25s ease-in, opacity 0.25s ease-in 0.4s;
+	transition: width 0.25s ease-in, opacity 0.25s ease-in 0.4s;
 	z-index: 10000;
 }
 
@@ -106,6 +111,9 @@
 	top: 0 !important;
 	right: 0 !important;
 	padding: 8px 10px 8px 0;	
+	-webkit-transition: none;
+	-moz-transition: none;
+	transition: none;
 }
 
 .multiupload-files .destructor::before {
@@ -135,6 +143,25 @@
 	background-image:         linear-gradient(left, rgba(251, 251, 251, 0) 0%, rgba(251, 251, 251, 1) 80%);
 }
 
+.multiupload-files .error .destructor {
+	color: rgba(255, 255, 255, 0.7) !important;
+	background: #eb6347;
+	-webkit-transition: none;
+	-moz-transition: none;
+	transition: none;
+}
+
+.multiupload-files .error .destructor:hover {
+	color: #fff !important;
+}
+
+.multiupload-files .error .destructor::before {
+	background-image: -webkit-linear-gradient(left, rgba(235, 99, 71, 0) 0%, rgba(235, 99, 71, 1) 80%);
+	background-image:    -moz-linear-gradient(left, rgba(235, 99, 71, 0) 0%, rgba(235, 99, 71, 1) 80%);
+	background-image:     -ms-linear-gradient(left, rgba(235, 99, 71, 0) 0%, rgba(235, 99, 71, 1) 80%);
+	background-image:      -o-linear-gradient(left, rgba(235, 99, 71, 0) 0%, rgba(235, 99, 71, 1) 80%);
+	background-image:         linear-gradient(left, rgba(235, 99, 71, 0) 0%, rgba(235, 99, 71, 1) 80%);
+}
 
 /* Drop area */
 
