@@ -17,6 +17,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version='1.2' date='2014-02-25' min='2.3.3'>
+			- Fixed path issues
+		</release>
 		<release version='1.1' date='2013-10-21' min='2.3.3'>
 			- Fixed inline errors
 			- Added German translation
