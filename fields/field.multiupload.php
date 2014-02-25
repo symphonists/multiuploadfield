@@ -407,7 +407,7 @@
 					return;
 				}
 
-				$file = $this->getFilePath($file_item['file']);
+				$file = $this->getFilePath(basename($file_item['file']));
 				$item = new XMLElement('file');
 				$item->setAttributeArray(array(
 					'size' =>	(
