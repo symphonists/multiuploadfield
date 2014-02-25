@@ -166,7 +166,7 @@
 				$file = $this->getFilePath(basename($data));
 
 				$result = array(
-					'file' =>		$data,
+					'file' =>		basename($data),
 					'mimetype' =>	null,
 					'size' =>		null,
 					'meta' =>		null

@@ -95,6 +95,7 @@
 				data: data,
 				cache: false,
 				contentType: false,
+				dataType: 'json',
 				processData: false,
 				type: 'POST',
 
