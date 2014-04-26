@@ -373,7 +373,7 @@
 						$header = new XMLElement('header', __('The file, %s, is no longer available. Please check that it exists, and is readable.', array('<code>' . basename($file) . '</code>')));
 					}
 					else {
-						$header = new XMLElement('header', Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", $filename), $file_item['file']));
+						$header = new XMLElement('header', Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", $filename), URL . $this->get('destination') . '/' . $filename));
 					}
 					
 					$li->appendChild($header);
