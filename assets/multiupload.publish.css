@@ -62,11 +62,12 @@
 
 .multiupload-files .error {
 	border-color: #cc3311 !important;
+	background: #eb6347;
 }
 
-.multiupload-files .error header {
+.multiupload-files .error header,
+.multiupload-files .error header a {
 	color: rgba(255, 255, 255, 0.7);
-	background: #eb6347;
 }
 
 .multiupload-files .error a,
