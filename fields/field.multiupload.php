@@ -43,8 +43,8 @@
 
 			return Field::entryDataCleanup($entry_id);
 		}
-		
-		
+
+
 		/**
 		 * Given an array of POST data, transform it for the Database
 		 */
@@ -63,10 +63,10 @@
 					$final_result[$column][] = $value;
 				}
 			}
-			
+
 			return $final_result;
 		}
-		
+
 		/**
 		 * Given an associatve array of array's from the Database, transform it so that
 		 * each nested array represents a file, rather than a piece of a file.
@@ -80,7 +80,7 @@
 				if($result == false) {
 					continue;
 				}
-				
+
 				if(!is_array($result)) {
 					$result = array($result);
 				}
@@ -93,7 +93,7 @@
 					$final_result[$i][$column] = $value;
 				}
 			}
-			
+
 			return $final_result;
 		}
 
@@ -117,6 +117,9 @@
 						break;
 					}
 				}
+			}
+			else {
+				$status = parent::checkPostFieldData($data, $message, $entry_id);
 			}
 
 			return $status;
@@ -147,7 +150,7 @@
 
 			return $final_result;
 		}
-		
+
 		public function processRawFieldDataIndividual($data, &$status, &$message=null, $simulate = false, $entry_id = null, $position) {
 			$status = self::__OK__;
 
@@ -337,8 +340,16 @@
 			// Markup
 			$wrapper->setAttribute('data-fieldname', 'fields' . $fieldnamePrefix . '[' . $this->get('element_name'). ']' .$fieldnamePostfix . '[]');
 			$label = Widget::Label($this->get('label'));
-			if($this->get('required') != 'yes') $label->appendChild(new XMLElement('i', __('Optional')));
-			$wrapper->appendChild($label);
+			if($this->get('required') != 'yes') {
+				$label->appendChild(new XMLElement('i', __('Optional')));
+			}
+
+			// Add error information into the field
+			if ($flagWithError != null) {
+				$wrapper->appendChild(Widget::Error($label, $flagWithError));
+			} else {
+				$wrapper->appendChild($label);
+			}
 
 			$duplicator = new XMLElement('div', null, array(
 				'class' => 'frame multiupload-files'
@@ -347,7 +358,7 @@
 				'data-add' => __('Add file'),
 				'data-remove' => __('Remove file')
 			));
-			
+
 			// Always ensure we are working with multiple files (even if there is one)
 			if(isset($data) && is_array($data)) {
 				$first = current($data);
@@ -375,7 +386,7 @@
 					else {
 						$header = new XMLElement('header', Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", $filename), URL . $this->get('destination') . '/' . $filename));
 					}
-					
+
 					$li->appendChild($header);
 					$li->appendChild(
 						Widget::Input('fields'.$fieldnamePrefix.'['.$this->get('element_name').']'.$fieldnamePostfix . '[]', $filename, 'hidden')
@@ -393,14 +404,15 @@
 
 			$files->appendChild($li);
 			$duplicator->appendChild($files);
+
 			$wrapper->appendChild($duplicator);
 		}
 
 		public function appendFormattedElement(XMLElement &$wrapper, $data, $encode = false, $mode = null, $entry_id = null) {
 			$data = $this->buildFileItems($data);
-			
+
 			$field = new XMLElement($this->get('element_name'));
-			
+
 			foreach($data as $file_item) {
 				// It is possible an array of NULL data will be passed in. Check for this.
 				if(!is_array($file_item) || !isset($file_item['file']) || is_null($file_item['file'])){
@@ -416,9 +428,9 @@
 										? General::formatFilesize(filesize($file))
 										: 'unknown'
 								),
-				 	'path' =>	General::sanitize(
+					'path' =>	General::sanitize(
 									str_replace(WORKSPACE, NULL, dirname($file))
-				 				),
+								),
 					'type' =>	$file_item['mimetype']
 				));
 
@@ -429,22 +441,22 @@
 				if(is_array($m) && !empty($m)){
 					$item->appendChild(new XMLElement('meta', NULL, $m));
 				}
-				
+
 				$field->appendChild($item);
 			}
-			
+
 			$wrapper->appendChild($field);
-			
+
 			return $wrapper;
 		}
 
 		public function prepareTableValue($data, XMLElement $link=NULL, $entry_id = null) {
 			$data = $this->buildFileItems($data);
 			$files = array();
-			
+
 			foreach($data as $file_item) {
 				$result = parent::prepareTableValue($file_item, $link, $entry_id);
-				
+
 				if(is_string($result)) {
 					$files[] = $result;
 				}
@@ -452,7 +464,7 @@
 					$files[] = $result->generate();
 				}
 			}
-			
+
 			return implode(', ', $files);
 		}
 
