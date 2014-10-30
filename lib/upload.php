@@ -58,5 +58,4 @@
 				'error' => $message
 			));
 		}
-		exit;
 	}

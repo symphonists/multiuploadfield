@@ -38,7 +38,10 @@
 
 		public function entryDataCleanup($entry_id, $data=NULL){
 			foreach($data as $file) {
-				//parent::entryDataCleanup($entry_id, $file);
+				$file = $this->getFilePath($file);
+				if (is_file($file)) {
+					General::deleteFile($file);
+				}
 			}
 
 			return Field::entryDataCleanup($entry_id);
@@ -129,6 +132,35 @@
 			$status = Field::__OK__;
 			$full_result = array();
 
+			// Get all the existing files for this entry.
+			if(!is_null($entry_id)) {
+				$existing_files = Symphony::Database()->fetchCol('file', sprintf(
+					"SELECT `file`, `mimetype`, `size`, `meta` FROM `tbl_entries_data_%d` WHERE `entry_id` = %d ORDER BY `id`",
+					$this->get('id'),
+					$entry_id
+				));
+
+				// has something changed, ok what?
+				if (count($existing_files) !== count($data)) {
+					foreach($existing_files as $i => $file) {
+						// if it doesn't exist in data, kill it.
+						if (in_array($file, $data) === false) {
+							// remove from database
+							Symphony::Database()->query(sprintf(
+								"DELETE FROM `tbl_entries_data_%d` WHERE `entry_id` = %d AND `file` = '%s'",
+								$this->get('id'),
+								$entry_id,
+								$file
+							));
+
+							// remove from file system
+							General::deleteFile($this->getFilePath($file));
+						}
+					}
+				}
+			}
+
+			// now try and upload whatever we were sent.
 			if(is_array($data)) {
 				foreach($data as $i => $file_data) {
 					$result = $this->processRawFieldDataIndividual($file_data, $status, $message, $simulate, $entry_id, $i);
@@ -215,29 +247,6 @@
 
 			if ($simulate && is_null($entry_id)) return $data;
 
-			// Check to see if the entry already has a file associated with it:
-			if (is_null($entry_id) === false && $position !== -1) {
-				$row = Symphony::Database()->fetchRow(0, sprintf(
-					"SELECT * FROM `tbl_entries_data_%s` WHERE `entry_id` = %d ORDER BY `id` LIMIT %d, 1",
-					$this->get('id'),
-					$entry_id,
-					$position
-				));
-
-				$existing_file = isset($row['file'])
-					? $this->getFilePath($row['file'])
-					: null;
-
-				// File was removed:
-				if (
-					$data['error'] == UPLOAD_ERR_NO_FILE
-					&& !is_null($existing_file)
-					&& is_file($existing_file)
-				) {
-					General::deleteFile($existing_file);
-				}
-			}
-
 			// Do not continue on upload error:
 			if ($data['error'] == UPLOAD_ERR_NO_FILE || $data['error'] != UPLOAD_ERR_OK) {
 				return false;
@@ -287,15 +296,6 @@
 				$status = self::__ERROR_CUSTOM__;
 
 				return false;
-			}
-
-			// File has been replaced:
-			if (
-				isset($existing_file)
-				&& $existing_file !== $file
-				&& is_file($existing_file)
-			) {
-				General::deleteFile($existing_file);
 			}
 
 			// Get the mimetype, don't trust the browser. RE: #1609
