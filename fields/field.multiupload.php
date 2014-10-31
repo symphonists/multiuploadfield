@@ -37,7 +37,7 @@
 	-------------------------------------------------------------------------*/
 
 		public function entryDataCleanup($entry_id, $data=NULL){
-			foreach($data as $file) {
+			if(is_array($data)) foreach($data as $file) {
 				$file = $this->getFilePath($file);
 				if (is_file($file)) {
 					General::deleteFile($file);
@@ -139,6 +139,12 @@
 					$this->get('id'),
 					$entry_id
 				));
+
+				// force array, even if all the files that were attached are
+				// now deleted. RE: #21
+				if (is_array($data) === false) {
+					$data = array();
+				}
 
 				// has something changed, ok what?
 				if (count($existing_files) !== count($data)) {
