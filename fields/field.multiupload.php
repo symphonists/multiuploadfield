@@ -146,22 +146,21 @@
 					$data = array();
 				}
 
-				// has something changed, ok what?
-				if (count($existing_files) !== count($data)) {
-					foreach($existing_files as $i => $file) {
-						// if it doesn't exist in data, kill it.
-						if (in_array($file, $data) === false) {
-							// remove from database
-							Symphony::Database()->query(sprintf(
-								"DELETE FROM `tbl_entries_data_%d` WHERE `entry_id` = %d AND `file` = '%s'",
-								$this->get('id'),
-								$entry_id,
-								$file
-							));
+				// loop over all existing files and see if it's also in the
+				// the `$data` that was sent in this request.
+				foreach($existing_files as $i => $file) {
+					// if it doesn't exist in data, kill it.
+					if (in_array($file, $data) === false) {
+						// remove from database
+						Symphony::Database()->query(sprintf(
+							"DELETE FROM `tbl_entries_data_%d` WHERE `entry_id` = %d AND `file` = '%s'",
+							$this->get('id'),
+							$entry_id,
+							$file
+						));
 
-							// remove from file system
-							General::deleteFile($this->getFilePath($file));
-						}
+						// remove from file system
+						General::deleteFile($this->getFilePath($file));
 					}
 				}
 			}
