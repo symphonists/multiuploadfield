@@ -1,11 +1,15 @@
 <?php
 
-	define('DOCROOT', rtrim(realpath(dirname(__FILE__) . '/../../../'), '/'));
+	define('DOCROOT', rtrim(realpath(__DIR__ . '/../../../'), '/'));
 	define('DOMAIN', rtrim(rtrim($_SERVER['HTTP_HOST'], '/') . str_replace('/extensions/multiuploadfield/lib', NULL, dirname($_SERVER['PHP_SELF'])), '/'));
 
-	// Include some parts of the engine
-	require_once(DOCROOT . '/symphony/lib/boot/bundle.php');
-	require_once(CORE . "/class.administration.php");
+	// Is there vendor autoloader?
+	if (@file_exists(DOCROOT . '/vendor/autoload.php')) {
+		require_once DOCROOT . '/vendor/autoload.php';
+	} else {
+		require_once DOCROOT . '/symphony/lib/boot/autoload.php';
+	}
+	require_once DOCROOT . '/symphony/lib/boot/bundle.php';
 
 	$instance = Administration::instance();
 	$entry_id = null;
