@@ -4,11 +4,7 @@
 	define('DOMAIN', rtrim(rtrim($_SERVER['HTTP_HOST'], '/') . str_replace('/extensions/multiuploadfield/lib', NULL, dirname($_SERVER['PHP_SELF'])), '/'));
 
 	// Is there vendor autoloader?
-	if (@file_exists(DOCROOT . '/vendor/autoload.php')) {
-		require_once DOCROOT . '/vendor/autoload.php';
-	} else {
-		require_once DOCROOT . '/symphony/lib/boot/autoload.php';
-	}
+	require_once DOCROOT . '/vendor/autoload.php';
 	require_once DOCROOT . '/symphony/lib/boot/bundle.php';
 
 	$instance = Administration::instance();
