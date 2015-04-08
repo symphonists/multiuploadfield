@@ -436,7 +436,8 @@
 					'path' =>	General::sanitize(
 									str_replace(WORKSPACE, NULL, dirname($file))
 								),
-					'type' =>	$file_item['mimetype']
+					'type' =>	$file_item['mimetype'],
+					'extension' =>	General::getExtension($file)
 				));
 
 				$item->appendChild(new XMLElement('filename', General::sanitize(basename($file))));
