@@ -474,6 +474,14 @@
 			return implode(', ', $files);
 		}
 
+		public function getExampleFormMarkup()
+		{
+			$label = Widget::Label($this->get('label'));
+			$label->appendChild(Widget::Input('fields['.$this->get('element_name').'][]'));
+
+			return $label;
+		}
+
 	/*-------------------------------------------------------------------------
 		Import:
 	-------------------------------------------------------------------------*/
