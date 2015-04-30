@@ -25,6 +25,7 @@
 				  `size` int(11) unsigned NULL,
 				  `mimetype` varchar(100) default NULL,
 				  `meta` TEXT default NULL,
+				  `order` int(11) NULL,
 				  PRIMARY KEY  (`id`),
 				  KEY `file` (`file`),
 				  KEY `mimetype` (`mimetype`)
@@ -197,7 +198,8 @@
 					'file' =>		null,
 					'mimetype' =>	null,
 					'size' =>		null,
-					'meta' =>		null
+					'meta' =>		null,
+					'order' =>		null
 				);
 			}
 
@@ -218,7 +220,7 @@
 						"SELECT `file`, `mimetype`, `size`, `meta` FROM `tbl_entries_data_%d` WHERE `entry_id` = %d ORDER BY `id` LIMIT %d, 1",
 						$this->get('id'),
 						$entry_id,
-						$position
+						$result['file']
 					));
 
 					if (empty($row) === false) {
@@ -247,6 +249,8 @@
 					$status = self::__INVALID_FIELDS__;
 				}
 
+				$result['order'] = $position;
+				
 				return $result;
 			}
 
@@ -310,7 +314,8 @@
 				'file' =>		basename($file),
 				'size' =>		$data['size'],
 				'mimetype' =>	$data['type'],
-				'meta' =>		serialize(self::getMetaInfo($file, $data['type']))
+				'meta' =>		serialize(self::getMetaInfo($file, $data['type'])),
+				'order' =>		$position
 			);
 		}
 

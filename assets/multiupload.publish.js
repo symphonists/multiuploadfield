@@ -19,7 +19,7 @@
 				files = fields.find('.multiupload-files');
 
 			files.symphonyDuplicator({
-				orderable: false,
+				orderable: true,
 				collapsible: false
 			});
 
