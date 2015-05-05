@@ -25,7 +25,6 @@
 				  `size` int(11) unsigned NULL,
 				  `mimetype` varchar(100) default NULL,
 				  `meta` TEXT default NULL,
-				  `order` int(11) NULL,
 				  PRIMARY KEY  (`id`),
 				  KEY `file` (`file`),
 				  KEY `mimetype` (`mimetype`)
@@ -198,8 +197,7 @@
 					'file' =>		null,
 					'mimetype' =>	null,
 					'size' =>		null,
-					'meta' =>		null,
-					'order' =>		null
+					'meta' =>		null
 				);
 			}
 
@@ -217,7 +215,7 @@
 				// Grab the existing entry data to preserve the MIME type and size information
 				if (isset($entry_id) && $position !== -1) {
 					$row = Symphony::Database()->fetchRow(0, sprintf(
-						"SELECT `file`, `mimetype`, `size`, `meta` FROM `tbl_entries_data_%d` WHERE `entry_id` = %d ORDER BY `id` LIMIT %d, 1",
+						"SELECT `file`, `mimetype`, `size`, `meta` FROM `tbl_entries_data_%d` WHERE `entry_id` = %d AND `file` = '%s' LIMIT 1",
 						$this->get('id'),
 						$entry_id,
 						$result['file']
@@ -248,8 +246,6 @@
 					$message = __('The file uploaded is no longer available. Please check that it exists, and is readable.');
 					$status = self::__INVALID_FIELDS__;
 				}
-
-				$result['order'] = $position;
 				
 				return $result;
 			}
@@ -314,8 +310,7 @@
 				'file' =>		basename($file),
 				'size' =>		$data['size'],
 				'mimetype' =>	$data['type'],
-				'meta' =>		serialize(self::getMetaInfo($file, $data['type'])),
-				'order' =>		$position
+				'meta' =>		serialize(self::getMetaInfo($file, $data['type']))
 			);
 		}
 
