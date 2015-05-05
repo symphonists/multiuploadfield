@@ -215,10 +215,10 @@
 				// Grab the existing entry data to preserve the MIME type and size information
 				if (isset($entry_id) && $position !== -1) {
 					$row = Symphony::Database()->fetchRow(0, sprintf(
-						"SELECT `file`, `mimetype`, `size`, `meta` FROM `tbl_entries_data_%d` WHERE `entry_id` = %d ORDER BY `id` LIMIT %d, 1",
+						"SELECT `file`, `mimetype`, `size`, `meta` FROM `tbl_entries_data_%d` WHERE `entry_id` = %d AND `file` = '%s' LIMIT 1",
 						$this->get('id'),
 						$entry_id,
-						$position
+						$result['file']
 					));
 
 					if (empty($row) === false) {
@@ -246,7 +246,7 @@
 					$message = __('The file uploaded is no longer available. Please check that it exists, and is readable.');
 					$status = self::__INVALID_FIELDS__;
 				}
-
+				
 				return $result;
 			}
 
