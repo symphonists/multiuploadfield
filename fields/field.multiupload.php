@@ -504,9 +504,15 @@
 			}
 			else if($mode === $modes->getPostdata) {
 				$result = array();
+				$status = Field::__OK__;
+				$message = '';
+				$count = 0;
+
 				foreach($data as $file) {
-					$result[]['file'] = $file;
+					$result[] = $this->processRawFieldDataIndividual($file, $status, $message, false, $entry_id, $count);
+					$count++;
 				}
+
 				return $result;
 			}
 
