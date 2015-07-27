@@ -505,7 +505,7 @@
 			else if($mode === $modes->getPostdata) {
 				$result = array();
 				foreach($data as $file) {
-					$result[]['file'] = $file;
+					$result[] = $file;
 				}
 				return $result;
 			}
