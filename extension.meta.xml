@@ -17,6 +17,10 @@
 		</author>
 	</authors>
 	<releases>
+		<release version='1.6.0' date='2015-11-19' min='2.6.0' max='2.6.x'>
+			- Added upload visual feedback
+			- Bug fixes
+		</release>
 		<release version='1.5' date='2015-04-22' min='2.6'>
 			- Updates for Symphony 2.6
 			- Added file extensions to the XML output

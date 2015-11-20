@@ -9,7 +9,7 @@ This field enabled drag and drop upload of multiple file in the Symphony backend
 Version|Symphony Version
 --------|---------------
 1.4| 2.3.3 - 2.5.2
-1.5| 2.6
+1.6| 2.6
 
 1. Add the `/multiuploadfield` folder in to your Symphony `/extensions` folder.
 2. Enable it by selecting the "Field: Multi File Upload", choose Enable from the with-selected menu, then click Apply.
