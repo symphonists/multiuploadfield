@@ -484,6 +484,25 @@ class FieldMultiUpload extends FieldUpload
         return implode(', ', $files);
     }
 
+    public function prepareReadableValue($data, $entry_id = null, $truncate = false, $defaultValue = null)
+    {
+        $data = $this->buildFileItems($data);
+        $files = array();
+
+        foreach ($data as $file_item) {
+            $result = parent::prepareReadableValue($file_item, $entry_id, $truncate, $defaultValue);
+
+            if (is_string($result)) {
+                $files[] = $result;
+            }
+            else {
+                $files[] = $result->generate();
+            }
+        }
+
+        return implode(', ', $files);
+    }
+
     public function getExampleFormMarkup()
     {
         $label = Widget::Label($this->get('label'));
