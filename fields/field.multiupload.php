@@ -323,6 +323,38 @@ class FieldMultiUpload extends FieldUpload
     }
 
 /*-------------------------------------------------------------------------
+    Sorting:
+-------------------------------------------------------------------------*/
+
+    /**
+     * This implementation can be removed when dropping Symphony 2.6.x compatibility.
+     * The parent implementation can return multiple records when used with this field.
+     * The core should be patched in 2.7.x
+     * @param  [type] &$joins
+     * @param  [type] &$where
+     * @param  [type] &$sort
+     * @param  string $order
+     */
+    public function buildSortingSQL(&$joins, &$where, &$sort, $order = 'ASC')
+    {
+        if (in_array(strtolower($order), array('random', 'rand'))) {
+            $sort = 'ORDER BY RAND()';
+        } else {
+            $sort = sprintf(
+                'ORDER BY (
+                    SELECT DISTINCT %s
+                    FROM tbl_entries_data_%d AS `ed`
+                    WHERE entry_id = e.id
+                    LIMIT 0, 1
+                ) %s',
+                '`ed`.file',
+                $this->get('id'),
+                $order
+            );
+        }
+    }
+
+/*-------------------------------------------------------------------------
     Output:
 -------------------------------------------------------------------------*/
 
