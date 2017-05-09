@@ -69,7 +69,7 @@
 				files.removeClass('empty');
 
 				var item = $('<li />', {
-					html: '<header><a>' + file.name + '</a><span class="multiupload-progress"></span><a class="destructor">' + Symphony.Language.get('In queue') + '</a></header>',
+					html: '<header class="frame-header"><a target="_blank">' + file.name + '</a><span class="multiupload-progress"></span><a class="destructor">' + Symphony.Language.get('In queue') + '</a></header>',
 					class: 'instance queued'
 				}).hide().appendTo(list).slideDown('fast');
 
