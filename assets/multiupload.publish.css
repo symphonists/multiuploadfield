@@ -37,7 +37,6 @@
 .multiupload-files .instance .frame-header a:first-of-type {
 	color: #2f77eb;
 	font-size: 1.2rem;
-	font-weight: 300;
 	margin-left: 0!important;
 }
 
@@ -55,6 +54,7 @@
 }
 
 .multiupload-drop.empty {
+	min-height: 0;
 	height: 0;
 	border: 0;
 }
