@@ -44,6 +44,10 @@
 	color: currentColor;
 }
 
+.multiupload-files .instance .frame-header img {
+	max-height: 15rem;
+}
+
 /* Duplicator */
 
 .multiupload-drop {
