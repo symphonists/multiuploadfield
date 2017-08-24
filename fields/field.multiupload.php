@@ -20,12 +20,12 @@ class FieldMultiUpload extends FieldUpload
     {
         return Symphony::Database()->query("
             CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
-              `id` int(11) unsigned NOT NULL auto_increment,
-              `entry_id` int(11) unsigned NOT NULL,
-              `file` varchar(255) default NULL,
-              `size` int(11) unsigned NULL,
-              `mimetype` varchar(100) default NULL,
-              `meta` TEXT default NULL,
+              `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+              `entry_id` INT(11) UNSIGNED NOT NULL,
+              `file` VARCHAR(255) DEFAULT NULL,
+              `size` INT(11) UNSIGNED NULL,
+              `mimetype` VARCHAR(100) DEFAULT NULL,
+              `meta` TEXT DEFAULT NULL,
               PRIMARY KEY  (`id`),
               KEY `file` (`file`),
               KEY `mimetype` (`mimetype`)
@@ -199,7 +199,7 @@ class FieldMultiUpload extends FieldUpload
         return $final_result;
     }
 
-    public function processRawFieldDataIndividual($data, &$status, &$message=null, $simulate = false, $entry_id = null, $position)
+    public function processRawFieldDataIndividual($data, &$status, &$message = null, $simulate = false, $entry_id = null, $position)
     {
         $status = self::__OK__;
 
@@ -474,7 +474,7 @@ class FieldMultiUpload extends FieldUpload
         $field = new XMLElement($this->get('element_name'));
 
         foreach($data as $file_item) {
-            // It is possible an array of NULL data will be passed in. Check for this.
+            // It is possible an array of null data will be passed in. Check for this.
             if(!is_array($file_item) || !isset($file_item['file']) || is_null($file_item['file'])){
                 return;
             }
@@ -489,7 +489,7 @@ class FieldMultiUpload extends FieldUpload
                                     : 'unknown'
                             ),
                 'path' =>   General::sanitize(
-                                str_replace(WORKSPACE, NULL, dirname($file))
+                                str_replace(WORKSPACE, null, dirname($file))
                             ),
                 'type' =>   $file_item['mimetype'],
                 'extension' =>  General::getExtension($file)
@@ -500,7 +500,7 @@ class FieldMultiUpload extends FieldUpload
             $m = unserialize($file_item['meta']);
 
             if(is_array($m) && !empty($m)){
-                $item->appendChild(new XMLElement('meta', NULL, $m));
+                $item->appendChild(new XMLElement('meta', null, $m));
             }
 
             $field->appendChild($item);

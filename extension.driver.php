@@ -5,10 +5,10 @@ class extension_multiuploadfield extends Extension {
     {
         return Symphony::Database()->query("
             CREATE TABLE `tbl_fields_multiupload` (
-              `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-              `field_id` int(11) unsigned NOT NULL,
-              `destination` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-              `validator` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+              `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+              `field_id` INT(11) UNSIGNED NOT NULL,
+              `destination` VARCHAR(255) COLLATE utf8_unicode_ci NOT NULL,
+              `validator` VARCHAR(255) COLLATE utf8_unicode_ci DEFAULT NULL,
               PRIMARY KEY (`id`),
               KEY `field_id` (`field_id`)
             ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

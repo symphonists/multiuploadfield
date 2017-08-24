@@ -1,7 +1,7 @@
 <?php
 
     define('DOCROOT', rtrim(realpath(__DIR__ . '/../../../'), '/'));
-    define('DOMAIN', rtrim(rtrim($_SERVER['HTTP_HOST'], '/') . str_replace('/extensions/multiuploadfield/lib', NULL, dirname($_SERVER['PHP_SELF'])), '/'));
+    define('DOMAIN', rtrim(rtrim($_SERVER['HTTP_HOST'], '/') . str_replace('/extensions/multiuploadfield/lib', null, dirname($_SERVER['PHP_SELF'])), '/'));
 
     // Is there vendor autoloader?
     require_once DOCROOT . '/vendor/autoload.php';
