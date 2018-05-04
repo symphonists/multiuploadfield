@@ -3,6 +3,7 @@
 	Symphony.Language.add({
 		'Drop files': false,
 		'In queue': false,
+		'Uploading': false,
 		'Remove file': false,
 		'Upload failed': false
 	});
@@ -19,7 +20,7 @@
 				files = fields.find('.multiupload-files');
 
 			files.symphonyDuplicator({
-				orderable: false,
+				orderable: true,
 				collapsible: false
 			});
 
@@ -119,10 +120,16 @@
 				},
 
 				// Upload progress
-				xhrFields: {
-					onprogress: function(progress) {
+				xhr: function() {
+					// get the native XmlHttpRequest object
+					var xhr = $.ajaxSettings.xhr();
+					// set the onprogress event handler
+					xhr.upload.onprogress = function(progress) {
+						item.find('.destructor').text(Symphony.Language.get('Uploading'));
 						item.find('.multiupload-progress').css('width', Math.floor(100 * progress.loaded / progress.total) + '%');
-        			}
+					};
+					// return the customized object
+					return xhr;
 				}
 			});
 		};
