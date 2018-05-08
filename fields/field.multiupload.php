@@ -84,6 +84,10 @@ class FieldMultiUpload extends FieldUpload
     private function buildFileItems($nested_array)
     {
         $final_result = array();
+        if (!isset($nested_array)) {
+            return $final_result;
+        }
+
         foreach($nested_array as $column => $result) {
             if($result == false) {
                 continue;
