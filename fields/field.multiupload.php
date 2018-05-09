@@ -84,6 +84,10 @@ class FieldMultiUpload extends FieldUpload
     private function buildFileItems($nested_array)
     {
         $final_result = array();
+        if (!isset($nested_array)) {
+            return $final_result;
+        }
+
         foreach($nested_array as $column => $result) {
             if($result == false) {
                 continue;
@@ -254,7 +258,7 @@ class FieldMultiUpload extends FieldUpload
                 $message = __('The file uploaded is no longer available. Please check that it exists, and is readable.');
                 $status = self::__INVALID_FIELDS__;
             }
-            
+
             return $result;
         }
 
@@ -567,9 +571,15 @@ class FieldMultiUpload extends FieldUpload
         }
         else if($mode === $modes->getPostdata) {
             $result = array();
+            $status = Field::__OK__;
+            $message = '';
+            $count = 0;
+
             foreach($data as $file) {
-                $result[] = $file;
+                $result[] = $this->processRawFieldDataIndividual($file, $status, $message, false, $entry_id, $count);
+                $count++;
             }
+
             return $result;
         }
 
