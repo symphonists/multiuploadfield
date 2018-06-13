@@ -3,16 +3,29 @@
 class extension_multiuploadfield extends Extension {
     public function install()
     {
-        return Symphony::Database()->query("
-            CREATE TABLE `tbl_fields_multiupload` (
-              `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-              `field_id` INT(11) UNSIGNED NOT NULL,
-              `destination` VARCHAR(255) COLLATE utf8_unicode_ci NOT NULL,
-              `validator` VARCHAR(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-              PRIMARY KEY (`id`),
-              KEY `field_id` (`field_id`)
-            ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-        ");
+        return Symphony::Database()
+            ->create('tbl_fields_multiupload')
+            ->ifNotExists()
+            ->charset('utf8')
+            ->collate('utf8_unicode_ci')
+            ->fields([
+                'id' => [
+                    'type' => 'int(11)',
+                    'auto' => true,
+                ],
+                'field_id' => 'int(11)',
+                'destination' => 'varchar(255)',
+                'validator' => [
+                    'type' => 'varchar(255)',
+                    'null' => true,
+                ],
+            ])
+            ->keys([
+                'id' => 'primary',
+                'field_id' => 'key',
+            ])
+            ->execute()
+            ->success();
     }
 
     public function update($previousVersion = null)
@@ -21,6 +34,10 @@ class extension_multiuploadfield extends Extension {
 
     public function uninstall()
     {
-        Symphony::Database()->query("DROP TABLE `tbl_fields_multiupload`");
+        return Symphony::Database()
+            ->drop('tbl_fields_multiupload')
+            ->ifExists()
+            ->execute()
+            ->success();
     }
 }
