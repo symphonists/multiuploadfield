@@ -27,7 +27,11 @@
     }
 
     // Upload the file
-    $field = FieldManager::fetch($field_id);
+    $field = (new FieldManager)
+        ->select()
+        ->field($field_id)
+        ->execute()
+        ->next();
     if(!($field instanceof FieldMultiUpload)) {
         header("HTTP/1.0 400 Bad Request", true, 400);
         exit;
