@@ -260,7 +260,7 @@ class FieldMultiUpload extends FieldUpload
                     ->where(['file' => $result['file']])
                     ->limit(1)
                     ->execute()
-                    ->rows()[0];
+                    ->next();
 
                 if (empty($row) === false) {
                     $result = $row;
