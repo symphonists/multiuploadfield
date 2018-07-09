@@ -31,7 +31,7 @@
 }
 
 .multiupload-files .instance .frame-header {
-	transition: background 0.45s;
+	transition: background 0.2s;
 }
 
 .multiupload-files .instance .frame-header a:first-of-type {
