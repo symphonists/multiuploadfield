@@ -32,6 +32,12 @@
 
 .multiupload-files .instance .frame-header {
 	transition: background 0.2s;
+	flex-direction: column-reverse;
+	align-items: center;
+}
+
+.multiupload-files .instance .frame-header .destructor {
+	margin: 0 0 0.5rem;
 }
 
 .multiupload-files .instance .frame-header a:first-of-type {
@@ -45,7 +51,7 @@
 }
 
 .multiupload-files .instance .frame-header img {
-	max-height: 15rem;
+	height: 10rem;
 }
 
 /* Duplicator */
