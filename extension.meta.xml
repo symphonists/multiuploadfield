@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension id="multiuploadfield" status="released" xmlns="http://getsymphony.com/schemas/extension/1.0">
-	<name>Multi Upload Field</name>
+	<name>Field: Multi Upload</name>
 	<description>Allows multiple files to be uploaded to the same field.</description>
 	<repo type="github">https://github.com/symphonists/multiuploadfield</repo>
 	<types>
@@ -17,6 +17,11 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="2.0.0" date="TBA" min="4.0.0" max="4.x.x" php-min="5.6.x" php-max="7.x.x">
+			- Update for Symphony 4.x
+			- Code refactoring for Database and EQFA
+			- Replace deprecated method fetch() by select()
+		</release>
 		<release version="1.6.2" date="2018-05-09" min="2.6.0" max="2.x.x">
 			- [#36](https://github.com/symphonists/multiuploadfield/issues/36) Fixes for meta data and empty files
 		</release>

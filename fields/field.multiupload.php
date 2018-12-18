@@ -3,12 +3,15 @@
 if (!defined('__IN_SYMPHONY__')) die('<h2>Symphony Error</h2><p>You cannot directly access this file</p>');
 
 require_once(TOOLKIT . '/fields/field.upload.php');
+require_once(EXTENSIONS.'/multiuploadfield/lib/class.entryquerymultiuploadadapter.php');
 
 class FieldMultiUpload extends FieldUpload
 {
     public function __construct()
     {
         parent::__construct();
+        $this->entryQueryFieldAdapter = new EntryQueryMultiUploadAdapter($this);
+
         $this->_name = __('Multi File Upload');
     }
 
@@ -18,19 +21,39 @@ class FieldMultiUpload extends FieldUpload
 
     public function createTable()
     {
-        return Symphony::Database()->query("
-            CREATE TABLE IF NOT EXISTS `tbl_entries_data_" . $this->get('id') . "` (
-              `id` int(11) unsigned NOT NULL auto_increment,
-              `entry_id` int(11) unsigned NOT NULL,
-              `file` varchar(255) default NULL,
-              `size` int(11) unsigned NULL,
-              `mimetype` varchar(100) default NULL,
-              `meta` TEXT default NULL,
-              PRIMARY KEY  (`id`),
-              KEY `file` (`file`),
-              KEY `mimetype` (`mimetype`)
-            ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-        ");
+        return Symphony::Database()
+            ->create('tbl_entries_data_' . $this->get('id'))
+            ->ifNotExists()
+            ->fields([
+                'id' => [
+                    'type' => 'int(11)',
+                    'auto' => true,
+                ],
+                'entry_id' => 'int(11)',
+                'file' => [
+                    'type' => 'varchar(255)',
+                    'null' => true,
+                ],
+                'size' => [
+                    'type' => 'int(11)',
+                    'null' => true,
+                ],
+                'mimetype' => [
+                    'type' => 'varchar(100)',
+                    'null' => true,
+                ],
+                'meta' => [
+                    'type' => 'text',
+                    'null' => true,
+                ],
+            ])
+            ->keys([
+                'id' => 'primary',
+                'file' => 'key',
+                'mimetype' => 'key',
+            ])
+            ->execute()
+            ->success();
     }
 
 /*-------------------------------------------------------------------------
@@ -145,11 +168,13 @@ class FieldMultiUpload extends FieldUpload
 
         // Get all the existing files for this entry.
         if(!is_null($entry_id)) {
-            $existing_files = Symphony::Database()->fetchCol('file', sprintf(
-                "SELECT `file`, `mimetype`, `size`, `meta` FROM `tbl_entries_data_%d` WHERE `entry_id` = %d ORDER BY `id`",
-                $this->get('id'),
-                $entry_id
-            ));
+            $existing_files = Symphony::Database()
+                ->select(['file', 'mimetype', 'size', 'meta'])
+                ->from('tbl_entries_data_' . $this->get('id'))
+                ->where(['entry_id' => $entry_id])
+                ->orderBy('id')
+                ->execute()
+                ->column('file');
 
             // force array, even if all the files that were attached are
             // now deleted. RE: #21
@@ -163,12 +188,12 @@ class FieldMultiUpload extends FieldUpload
                 // if it doesn't exist in data, kill it.
                 if (in_array($file, $data) === false) {
                     // remove from database
-                    Symphony::Database()->query(sprintf(
-                        "DELETE FROM `tbl_entries_data_%d` WHERE `entry_id` = %d AND `file` = '%s'",
-                        $this->get('id'),
-                        $entry_id,
-                        $file
-                    ));
+                    Symphony::Database()
+                        ->delete('tbl_entries_data_' . $this->get('id'))
+                        ->where(['entry_id' => $entry_id])
+                        ->where(['file' => $file])
+                        ->execute()
+                        ->success();
 
                     // remove from file system
                     General::deleteFile($this->getFilePath($file));
@@ -199,7 +224,7 @@ class FieldMultiUpload extends FieldUpload
         return $final_result;
     }
 
-    public function processRawFieldDataIndividual($data, &$status, &$message=null, $simulate = false, $entry_id = null, $position)
+    public function processRawFieldDataIndividual($data, &$status, &$message = null, $simulate = false, $entry_id = null, $position)
     {
         $status = self::__OK__;
 
@@ -226,12 +251,14 @@ class FieldMultiUpload extends FieldUpload
 
             // Grab the existing entry data to preserve the MIME type and size information
             if (isset($entry_id) && $position !== -1) {
-                $row = Symphony::Database()->fetchRow(0, sprintf(
-                    "SELECT `file`, `mimetype`, `size`, `meta` FROM `tbl_entries_data_%d` WHERE `entry_id` = %d AND `file` = '%s' LIMIT 1",
-                    $this->get('id'),
-                    $entry_id,
-                    $result['file']
-                ));
+                $row = Symphony::Database()
+                    ->select(['file', 'mimetype', 'size', 'meta'])
+                    ->from('tbl_entries_data_' . $this->get('id'))
+                    ->where(['entry_id' => $entry_id])
+                    ->where(['file' => $result['file']])
+                    ->limit(1)
+                    ->execute()
+                    ->next();
 
                 if (empty($row) === false) {
                     $result = $row;
@@ -433,7 +460,17 @@ class FieldMultiUpload extends FieldUpload
                     $header = new XMLElement('header', __('The file, %s, is no longer available. Please check that it exists, and is readable.', array('<code>' . basename($file) . '</code>')));
                 }
                 else {
-                    $header = new XMLElement('header', Widget::Anchor(preg_replace("![^a-z0-9]+!i", "$0&#8203;", $filename), URL . $this->get('destination') . '/' . $filename));
+                    $header = new XMLElement(
+                        'header',
+                        Widget::Anchor(
+                            preg_replace("![^a-z0-9]+!i", "$0&#8203;", $filename),
+                            URL . $this->get('destination') . '/' . $filename,
+                            null,
+                            null,
+                            null,
+                            array('target' => '_blank')
+                        )
+                    );
                 }
 
                 $li->appendChild($header);
@@ -464,7 +501,7 @@ class FieldMultiUpload extends FieldUpload
         $field = new XMLElement($this->get('element_name'));
 
         foreach($data as $file_item) {
-            // It is possible an array of NULL data will be passed in. Check for this.
+            // It is possible an array of null data will be passed in. Check for this.
             if(!is_array($file_item) || !isset($file_item['file']) || is_null($file_item['file'])){
                 return;
             }
@@ -479,7 +516,7 @@ class FieldMultiUpload extends FieldUpload
                                     : 'unknown'
                             ),
                 'path' =>   General::sanitize(
-                                str_replace(WORKSPACE, NULL, dirname($file))
+                                str_replace(WORKSPACE, null, dirname($file))
                             ),
                 'type' =>   $file_item['mimetype'],
                 'extension' =>  General::getExtension($file)
@@ -490,7 +527,7 @@ class FieldMultiUpload extends FieldUpload
             $m = unserialize($file_item['meta']);
 
             if(is_array($m) && !empty($m)){
-                $item->appendChild(new XMLElement('meta', NULL, $m));
+                $item->appendChild(new XMLElement('meta', null, $m));
             }
 
             $field->appendChild($item);

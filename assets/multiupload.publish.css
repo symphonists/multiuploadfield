@@ -15,80 +15,56 @@
   font-style: normal;
 }
 
-/* File list */
+/* Instances */
 
-.multiupload-files .instance {
-	transition: none;
-	white-space: nowrap;
-	overflow: hidden;
-	position: relative;
-	padding: 0 10px;
-	border-top: 1px solid #c4c4c4;
-	min-height: 31px;
+.multiupload-files {
+	background: none;
 }
 
-.multiupload-files .instance:first-of-type {
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
+.multiupload-files ul,
+.multiupload-files ol {
+	margin: 0;
 }
 
-.multiupload-files .queued {
-	background: #fbfbfb;
-	color: #dad6cf;
-}
-
-.multiupload-files a:first-of-type {
-	border: none !important;
-	margin-top: 0 !important;
-	color: rgba(63, 105, 165, 1) !important;
-	-webkit-transition: color 0.15s ease-in 0.4s;
-	transition: none;
-}
-
-.multiupload-files .queued a:first-of-type {
-	color: rgba(63, 105, 165, 0.5) !important;
-}
-
-.multiupload-files .content {
+.multiupload-files .instance .content {
 	display: none;
 }
 
-.multiupload-files header {
-	-webkit-box-shadow: none !important;
-	box-shadow: none !important;
-	padding: 8px 0 7px;
-	border: none !important;
-	position: static !important;
+.multiupload-files .instance .frame-header {
+	transition: background 0.2s;
+	flex-direction: column-reverse;
+	align-items: center;
 }
 
-.multiupload-files .error {
-	border-color: #cc3311 !important;
-	background: #eb6347;
+.multiupload-files .instance .frame-header .destructor {
+	margin: 0 0 0.5rem;
 }
 
-.multiupload-files .error header,
-.multiupload-files .error header a {
-	color: rgba(255, 255, 255, 0.7);
+.multiupload-files .instance .frame-header a:first-of-type {
+	color: #2f77eb;
+	font-size: 1.2rem;
+	margin-left: 0!important;
 }
 
-.multiupload-files .error a,
-.multiupload-files .error code {
-	color: #fff;
+.multiupload-files .instance .frame-header a:first-of-type:hover {
+	color: currentColor;
+}
+
+.multiupload-files .instance .frame-header img {
+	height: 10rem;
 }
 
 /* Duplicator */
 
 .multiupload-drop {
+	border-radius: 5px 5px 0 0;
 	padding-bottom: 0;
-	margin-top: -12px;
+	margin-top: -2rem;
 	margin-bottom: 0;
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	border-bottom-left-radius: 0 !important;
-	border-bottom-right-radius: 0 !important;
 }
 
 .multiupload-drop.empty {
+	min-height: 0;
 	height: 0;
 	border: 0;
 }
@@ -96,6 +72,11 @@
 .multiupload-drop.empty ol {
 	border: none;
 	min-height: 0;
+}
+
+.multiupload-drop.empty + .multiupload-droparea {
+	border-radius: 5px;
+	border-top: 1px solid #d3dce2;
 }
 
 .multiupload-drop li:last-of-type {
@@ -107,11 +88,11 @@
 
 .multiupload-progress {
 	position: absolute;
-	bottom: -1px;
-	left: -10px;
+	bottom: 0;
+	left: 0;
 	width: 2%;
 	height: 4px;
-	background: #4d78b4;
+	background: #2f77eb;
 	opacity: 0;
 	-webkit-transition: width 0.25s ease-in, opacity 0.25s ease-in 0.4s;
 	-moz-transition: width 0.25s ease-in, opacity 0.25s ease-in 0.4s;
@@ -123,74 +104,13 @@
 	opacity: 1;
 }
 
-/* Destructor */
-
-.multiupload-files .destructor {
-	background-color: #f5f5f5;
-	top: 0 !important;
-	right: 0 !important;
-	padding: 8px 10px 8px 0;
-	-webkit-transition: none;
-	-moz-transition: none;
-	transition: none;
-}
-
-.multiupload-files .destructor::before {
-	content: '';
-	display: block;
-	width: 22px;
-	height: 32px;
-	position: absolute;
-	top: 0;
-	left: -22px;
-	background-image: -webkit-linear-gradient(left, rgba(245, 245, 245, 0) 0%, rgba(245, 245, 245, 1) 80%);
-	background-image:    -moz-linear-gradient(left, rgba(245, 245, 245, 0) 0%, rgba(245, 245, 245, 1) 80%);
-	background-image:     -ms-linear-gradient(left, rgba(245, 245, 245, 0) 0%, rgba(245, 245, 245, 1) 80%);
-	background-image:      -o-linear-gradient(left, rgba(245, 245, 245, 0) 0%, rgba(245, 245, 245, 1) 80%);
-	background-image:         linear-gradient(left, rgba(245, 245, 245, 0) 0%, rgba(245, 245, 245, 1) 80%);
-}
-
-.multiupload-files .queued .destructor {
-	background-color: #fbfbfb;
-}
-
-.multiupload-files .queued .destructor::before {
-	background-image: -webkit-linear-gradient(left, rgba(251, 251, 251, 0) 0%, rgba(251, 251, 251, 1) 80%);
-	background-image:    -moz-linear-gradient(left, rgba(251, 251, 251, 0) 0%, rgba(251, 251, 251, 1) 80%);
-	background-image:     -ms-linear-gradient(left, rgba(251, 251, 251, 0) 0%, rgba(251, 251, 251, 1) 80%);
-	background-image:      -o-linear-gradient(left, rgba(251, 251, 251, 0) 0%, rgba(251, 251, 251, 1) 80%);
-	background-image:         linear-gradient(left, rgba(251, 251, 251, 0) 0%, rgba(251, 251, 251, 1) 80%);
-}
-
-.multiupload-files .error .destructor {
-	color: rgba(255, 255, 255, 0.7) !important;
-	background: #eb6347;
-	-webkit-transition: none;
-	-moz-transition: none;
-	transition: none;
-}
-
-.multiupload-files .error .destructor:hover {
-	color: #fff !important;
-}
-
-.multiupload-files .error .destructor::before {
-	background-image: -webkit-linear-gradient(left, rgba(235, 99, 71, 0) 0%, rgba(235, 99, 71, 1) 80%);
-	background-image:    -moz-linear-gradient(left, rgba(235, 99, 71, 0) 0%, rgba(235, 99, 71, 1) 80%);
-	background-image:     -ms-linear-gradient(left, rgba(235, 99, 71, 0) 0%, rgba(235, 99, 71, 1) 80%);
-	background-image:      -o-linear-gradient(left, rgba(235, 99, 71, 0) 0%, rgba(235, 99, 71, 1) 80%);
-	background-image:         linear-gradient(left, rgba(235, 99, 71, 0) 0%, rgba(235, 99, 71, 1) 80%);
-}
-
 /* Drop area */
 
 .multiupload-droparea {
+	border-radius: 0 0 5px 5px;
 	background: #fff;
-	border: 1px solid #b8b8b8;
-	border-top-width: 0;
-	border-bottom-left-radius: 4px;
-	border-bottom-right-radius: 4px;
-	box-shadow: 0 1px 2px #e5e5e5;
+	border: 1px solid #d3dce2;
+	border-top: none;
 	text-align: center;
 	padding: 20px;
 	color: #b8b8b8;
@@ -225,16 +145,14 @@
 
 .multiupload-fallback {
 	padding: 5px 10px !important;
-} 
+}
 
 /* Ordering */
 
-.multiupload-files .ordering a {
-	color: #FFF !important;
+.multiupload-files .ordering .frame-header {
+	background: #2f77eb;
 }
 
-.multiupload-files .ordering .destructor,
-.multiupload-files .ordering .destructor::before,
-.multiupload-files .ordering .frame-header {
-	background: transparent;
+.multiupload-files .ordering a {
+	color: #FFF!important;
 }

@@ -1,7 +1,7 @@
 <?php
 
     define('DOCROOT', rtrim(realpath(__DIR__ . '/../../../'), '/'));
-    define('DOMAIN', rtrim(rtrim($_SERVER['HTTP_HOST'], '/') . str_replace('/extensions/multiuploadfield/lib', NULL, dirname($_SERVER['PHP_SELF'])), '/'));
+    define('DOMAIN', rtrim(rtrim($_SERVER['HTTP_HOST'], '/') . str_replace('/extensions/multiuploadfield/lib', null, dirname($_SERVER['PHP_SELF'])), '/'));
 
     // Is there vendor autoloader?
     require_once DOCROOT . '/vendor/autoload.php';
@@ -27,7 +27,11 @@
     }
 
     // Upload the file
-    $field = FieldManager::fetch($field_id);
+    $field = (new FieldManager)
+        ->select()
+        ->field($field_id)
+        ->execute()
+        ->next();
     if(!($field instanceof FieldMultiUpload)) {
         header("HTTP/1.0 400 Bad Request", true, 400);
         exit;
