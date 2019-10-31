@@ -6,6 +6,11 @@ require_once(TOOLKIT . '/fields/field.upload.php');
 
 class FieldMultiUpload extends FieldUpload
 {
+    protected static $svgMimeTypes = array(
+        'image/svg+xml',
+        'image/svg',
+    );
+
     public function __construct()
     {
         parent::__construct();
@@ -107,6 +112,57 @@ class FieldMultiUpload extends FieldUpload
         }
 
         return $final_result;
+    }
+
+    /**
+     * Adds support for svg
+     */    
+    protected static function removePx($value)
+    {
+        return str_replace('px', '', $value);
+    }
+    
+    protected static function isSvg($type)
+    {
+        return General::in_iarray($type, self::$svgMimeTypes);
+    }
+
+    public static function getMetaInfo($file, $type)
+    {
+        $metas = parent::getMetaInfo($file, $type);
+        if (self::isSvg($type)) {
+            $svg = @simplexml_load_file($file);
+            if (is_object($svg)) {
+                $svg->registerXPathNamespace('svg', 'http://www.w3.org/2000/svg');
+
+                $svgAttr = $svg->xpath('@width');
+                if (is_object($svgAttr)) {
+                    $metas['width'] = floatval(self::removePx($svgAttr[0]->__toString()));
+                }
+
+                $svgAttr = $svg->xpath('@height');
+                if (is_object($svgAttr)) {
+                    $metas['height'] = floatval(self::removePx($svgAttr[0]->__toString()));
+                }
+
+                if (!isset($metas['width']) || !isset($metas['height'])) {
+                    $viewBoxes = array('@viewBox', '@viewbox');
+                    foreach ($viewBoxes as $vb) {
+                        $svgAttr = $svg->xpath($vb);
+                        if (is_array($svgAttr) && !empty($svgAttr)) {
+                            $matches = array();
+                            $matches_count = preg_match('/^([-]?[\d\.]+)[\s]+([-]?[\d\.]+)[\s]+([\d\.]+)[\s]+([\d\.]+)[\s]?$/i', $svgAttr[0]->__toString(), $matches);
+                            if ($matches_count == 1 && count($matches) == 5) {
+                                $metas['width'] = floatval($matches[3]) - floatval($matches[1]);
+                                $metas['height'] = floatval($matches[4]) - floatval($matches[2]);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $metas;
     }
 
 /*-------------------------------------------------------------------------
@@ -249,7 +305,7 @@ class FieldMultiUpload extends FieldUpload
                 }
 
                 if (empty($result['meta'])) {
-                    $result['meta'] = serialize(self::getMetaInfo($file, $result['mimetype']));
+                    $result['meta'] = serialize(static::getMetaInfo($file, $result['mimetype']));
                 }
             }
 
@@ -322,7 +378,7 @@ class FieldMultiUpload extends FieldUpload
             'file' =>       basename($file),
             'size' =>       $data['size'],
             'mimetype' =>   $data['type'],
-            'meta' =>       serialize(self::getMetaInfo($file, $data['type']))
+            'meta' =>       serialize(static::getMetaInfo($file, $data['type']))
         );
     }
 
