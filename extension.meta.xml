@@ -17,6 +17,11 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="1.6.3" date="2019-10-31" min="2.6.0" max="2.x.x">
+			- Adds missing meta data for SVG images (width and height). Taken from awesome 'Field: Image Upload' extension.
+			- Warning! Update will automatically update meta data of existing multiupload field SVG entries too, so you don't need to reupload all your SVG files. Hooray! Just make sure to backup your database before updating.
+			- Added Slovak translation
+		</release>
 		<release version="1.6.2" date="2018-05-09" min="2.6.0" max="2.x.x">
 			- [#36](https://github.com/symphonists/multiuploadfield/issues/36) Fixes for meta data and empty files
 		</release>
