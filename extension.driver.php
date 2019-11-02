@@ -32,17 +32,21 @@ class extension_multiuploadfield extends Extension {
                 
                 // Get only SVG DB entries
                 $svg_files = Symphony::Database()->fetch("SELECT `id`, `file`, `mimetype` FROM `tbl_entries_data_$table_id` WHERE `mimetype` LIKE '%image/svg%'");
+
+                if (!empty($svg_files)) {
                 
-                foreach ($svg_files as $svg) {
+                    foreach ($svg_files as $svg) {
 
-                    $entry_id = intval($svg['id']);
-                    $file = $file_path . '/' . $svg['file'];
-                    $mimetype = $svg['mimetype'];
+                        $entry_id = intval($svg['id']);
+                        $file = $file_path . '/' . $svg['file'];
+                        $mimetype = $svg['mimetype'];
 
-                    $meta = serialize(FieldMultiUpload::getMetaInfo($file, $mimetype));
+                        $meta = serialize(FieldMultiUpload::getMetaInfo($file, $mimetype));
 
-                    // Update SVG DB entry
-                    Symphony::Database()->query("UPDATE `tbl_entries_data_$table_id` SET `meta` = '" . $meta . "' WHERE `id` = $entry_id");
+                        // Update SVG DB entry
+                        Symphony::Database()->query("UPDATE `tbl_entries_data_$table_id` SET `meta` = '" . $meta . "' WHERE `id` = $entry_id");
+
+                    }
 
                 }
 
